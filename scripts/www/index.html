@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>VIP追剧神器</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"PingFang SC","Microsoft Yahei",sans-serif;-webkit-tap-highlight-color:transparent;}
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#ffe9f4,#ffd1e4,#ffb8d6,#ffa8ce);
+  background-size:200% 200%;
+  animation:bgFlow 12s ease infinite;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;position:relative;overflow:hidden;
+}
+@keyframes bgFlow{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+/* 柔美云朵 */
+.cloud{
+  position:fixed;z-index:1;opacity:0.8;filter:blur(1.2px);pointer-events:none;
+  animation:cloudFloat 9s ease-in-out infinite;
+}
+.cloud svg{width:100%;height:auto;display:block;}
+.cloud1{top:6%;left:4%;width:170px;animation-delay:0s;}
+.cloud2{top:10%;right:6%;width:230px;animation-delay:1.6s;}
+.cloud3{top:58%;left:3%;width:130px;animation-delay:3s;}
+.cloud4{top:70%;right:5%;width:180px;animation-delay:4.2s;}
+.cloud5{top:85%;left:35%;width:120px;animation-delay:5.4s;}
+@keyframes cloudFloat{
+  0%,100%{transform:translateY(0) translateX(0);}
+  50%{transform:translateY(-22px) translateX(8px);}
+}
+/* 浅蓝色流星：更多、从右上角滑向左下角、末尾慢慢淡出消失 */
+.meteor{
+  position:fixed;z-index:1;pointer-events:none;
+  width:180px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,rgba(190,225,255,0.95),rgba(190,225,255,0));
+  transform:rotate(-35deg);
+  opacity:0;
+  animation:meteorFly 7s ease-in infinite;
+}
+.meteor::before{
+  content:"";position:absolute;top:-2px;left:0;
+  width:6px;height:6px;border-radius:50%;
+  background:#e0f1ff;
+  box-shadow:0 0 10px 4px rgba(180,220,255,0.9);
+}
+.meteor1{top:6%;left:78%;animation-delay:0.3s;}
+.meteor2{top:12%;left:88%;width:140px;animation-delay:1.6s;}
+.meteor3{top:18%;left:68%;width:150px;animation-delay:2.9s;}
+.meteor4{top:24%;left:92%;width:120px;animation-delay:0.9s;}
+.meteor5{top:30%;left:74%;width:160px;animation-delay:4.1s;}
+.meteor6{top:36%;left:86%;width:130px;animation-delay:5.3s;}
+.meteor7{top:42%;left:64%;width:140px;animation-delay:2.2s;}
+.meteor8{top:48%;left:90%;width:150px;animation-delay:3.6s;}
+.meteor9{top:10%;left:95%;width:120px;animation-delay:4.7s;}
+.meteor10{top:26%;left:82%;width:110px;animation-delay:6s;}
+.meteor11{top:38%;left:96%;width:150px;animation-delay:1.2s;}
+.meteor12{top:54%;left:76%;width:130px;animation-delay:5.9s;}
+.meteor13{top:46%;left:70%;width:110px;animation-delay:0.6s;}
+.meteor14{top:58%;left:88%;width:140px;animation-delay:2.6s;}
+@keyframes meteorFly{
+  0%{opacity:0;transform:translate(0,0) rotate(-35deg);}
+  10%{opacity:1;}
+  45%{opacity:0.95;}
+  100%{opacity:0;transform:translate(-700px,480px) rotate(-35deg);}
+}
+.card{
+  width:100%;max-width:420px;z-index:2;position:relative;
+  background:rgba(255,255,255,0.72);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,0.85);
+  border-radius:26px;padding:32px 24px 26px;
+  box-shadow:0 14px 44px rgba(216,74,136,0.22),inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.logo{text-align:center;margin-bottom:6px;font-size:42px;}
+h1{
+  text-align:center;color:#d64886;font-size:26px;font-weight:800;
+  letter-spacing:3px;margin-bottom:4px;
+  text-shadow:0 2px 10px rgba(214,72,134,0.3);
+}
+.sub{text-align:center;color:#ff8ab8;font-size:13px;margin-bottom:22px;letter-spacing:1px;}
+.label{color:#d64886;font-size:14px;font-weight:600;margin-bottom:8px;display:block;}
+.input-row{display:flex;gap:8px;margin-bottom:20px;}
+.input-row input{
+  flex:1;min-width:0;
+  background:rgba(255,255,255,0.9);
+  border:1px solid rgba(255,255,255,0.95);
+  border-radius:14px;padding:13px 14px;
+  color:#b83872;font-size:15px;outline:none;
+  box-shadow:0 4px 12px rgba(232,115,168,0.15);
+}
+.input-row input::placeholder{color:#ff9cc6;}
+.input-row input:focus{border-color:#ff7ad9;}
+.btn-clear{
+  background:linear-gradient(135deg,#ff7ad9,#ff48a4);
+  border:none;color:#fff;border-radius:14px;padding:0 16px;
+  font-size:14px;font-weight:600;cursor:pointer;
+  box-shadow:0 4px 12px rgba(232,115,168,0.25);
+}
+.site-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.site-btn{
+  padding:15px 6px;border:none;border-radius:16px;
+  font-size:15px;font-weight:700;color:#fff;cursor:pointer;
+  transition:transform .15s,box-shadow .25s;
+  box-shadow:0 6px 18px rgba(0,0,0,0.12);
+}
+.site-btn:active{transform:scale(0.96);}
+.btn-iqy{background:linear-gradient(135deg,#ff8fd0,#ff5fb0);}
+.btn-tx{background:linear-gradient(135deg,#ff8fd0,#ff5fb0);}
+.btn-yk{background:linear-gradient(135deg,#ff8fd0,#ff5fb0);}
+.btn-bili{background:linear-gradient(135deg,#ff8fd0,#ff5fb0);}
+.play-btn{
+  width:100%;padding:16px;border:none;border-radius:16px;
+  background:linear-gradient(135deg,#ff7ad9,#ff48a4);
+  color:#fff;font-size:17px;font-weight:800;letter-spacing:2px;cursor:pointer;
+  box-shadow:0 8px 24px rgba(255,72,164,0.4);
+  transition:transform .15s;
+}
+.play-btn:active{transform:scale(0.98);}
+.tip{text-align:center;color:#c24a86;font-size:12px;margin-top:16px;line-height:1.6;}
+</style>
+</head>
+<body>
+<!-- 粉色柔美云朵 -->
+<div class="cloud cloud1"><svg viewBox="0 0 300 160"><defs><linearGradient id="c1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffd9ea"/></linearGradient></defs><path fill="url(#c1)" d="M58,150 C22,150 4,124 20,98 C30,76 56,68 76,78 C86,46 122,36 142,54 C168,32 204,42 214,70 C240,74 260,98 248,124 C243,138 226,150 208,150 Z"/></svg></div>
+<div class="cloud cloud2"><svg viewBox="0 0 300 160"><defs><linearGradient id="c2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff4fa"/><stop offset="1" stop-color="#ffc9e2"/></linearGradient></defs><path fill="url(#c2)" d="M58,150 C22,150 4,124 20,98 C30,76 56,68 76,78 C86,46 122,36 142,54 C168,32 204,42 214,70 C240,74 260,98 248,124 C243,138 226,150 208,150 Z"/></svg></div>
+<div class="cloud cloud3"><svg viewBox="0 0 300 160"><defs><linearGradient id="c3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffd5e8"/></linearGradient></defs><path fill="url(#c3)" d="M58,150 C22,150 4,124 20,98 C30,76 56,68 76,78 C86,46 122,36 142,54 C168,32 204,42 214,70 C240,74 260,98 248,124 C243,138 226,150 208,150 Z"/></svg></div>
+<div class="cloud cloud4"><svg viewBox="0 0 300 160"><defs><linearGradient id="c4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6fb"/><stop offset="1" stop-color="#ffcde4"/></linearGradient></defs><path fill="url(#c4)" d="M58,150 C22,150 4,124 20,98 C30,76 56,68 76,78 C86,46 122,36 142,54 C168,32 204,42 214,70 C240,74 260,98 248,124 C243,138 226,150 208,150 Z"/></svg></div>
+<div class="cloud cloud5"><svg viewBox="0 0 300 160"><defs><linearGradient id="c5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffd3e7"/></linearGradient></defs><path fill="url(#c5)" d="M58,150 C22,150 4,124 20,98 C30,76 56,68 76,78 C86,46 122,36 142,54 C168,32 204,42 214,70 C240,74 260,98 248,124 C243,138 226,150 208,150 Z"/></svg></div>
+
+<!-- 浅蓝色流星 -->
+<div class="meteor meteor1"></div>
+<div class="meteor meteor2"></div>
+<div class="meteor meteor3"></div>
+<div class="meteor meteor4"></div>
+<div class="meteor meteor5"></div>
+<div class="meteor meteor6"></div>
+<div class="meteor meteor7"></div>
+<div class="meteor meteor8"></div>
+<div class="meteor meteor9"></div>
+<div class="meteor meteor10"></div>
+<div class="meteor meteor11"></div>
+<div class="meteor meteor12"></div>
+<div class="meteor meteor13"></div>
+<div class="meteor meteor14"></div>
+
+<div class="card">
+  <div class="logo">🎬</div>
+  <h1>VIP追剧神器</h1>
+  <p class="sub">输入视频链接 · 一键解析播放</p>
+  <label class="label">输入视频网址：</label>
+  <div class="input-row">
+    <input id="videoUrl" type="text" placeholder="粘贴视频链接，如 v.qq.com/xxx" />
+    <button class="btn-clear" onclick="clearUrl()">清空</button>
+  </div>
+  <div class="site-grid">
+    <button class="site-btn btn-iqy" onclick="openSite('https://www.iqiyi.com')">爱奇艺</button>
+    <button class="site-btn btn-tx" onclick="openSite('https://v.qq.com')">腾讯视频</button>
+    <button class="site-btn btn-yk" onclick="openSite('https://www.youku.com')">优酷视频</button>
+    <button class="site-btn btn-bili" onclick="openSite('https://www.bilibili.com/')">哔哩哔哩</button>
+  </div>
+  <button class="play-btn" onclick="playVideo()">▶ 播放VIP视频</button>
+  <p class="tip">提示：本页面仅供技术学习与测试使用，不可用作商业或其他用途。</p>
+</div>
+<script>
+function openSite(url){window.open(url,"_blank");}
+function playVideo(){
+  var url=document.getElementById("videoUrl").value.trim();
+  if(!url){alert("请先粘贴视频网址");return;}
+  window.open("https://jx.xmflv.cc/?url="+encodeURIComponent(url),"_blank");
+}
+function clearUrl(){document.getElementById("videoUrl").value="";}
+document.getElementById("videoUrl").addEventListener("keydown",function(e){if(e.key==="Enter"){playVideo();}});
+</script>
+</body>
+</html>
